@@ -1,4 +1,6 @@
 class postfix_rdm (
+  $mydomain,
+  $recipient_map_name,
   $relayhost,
   $relayhost_port,
   $relayhost_username,
@@ -29,5 +31,18 @@ class postfix_rdm (
 
   exec { 'postmap_sasl_passwd':
     command => '/usr/sbin/postmap /etc/postfix/sasl_passwd',
+  }
+
+  file { '/etc/postfix/recipient_canonical':
+    ensure => file,
+    mode   => '0644',
+    owner  => 'root',
+    group  => 'root',
+    content => template('postfix_rdm/recipient_canonical.erb'),
+    notify  => Exec['postmap_recipient_canonical'],
+  }
+
+  exec { 'postmap_recipient_canonical':
+    command => '/usr/sbin/postmap /etc/postfix/recipient_canonical',
   }
 }

@@ -45,4 +45,12 @@ class postfix_rdm (
   exec { 'postmap_recipient_canonical':
     command => '/usr/sbin/postmap /etc/postfix/recipient_canonical',
   }
+
+  $sasl_packages = [
+    'cyrus-sasl',
+    'cyrus-sasl-lib',
+    'cyrus-sasl-plain',
+  ]
+
+  ensure_packages( $sasl_packages )
 }
